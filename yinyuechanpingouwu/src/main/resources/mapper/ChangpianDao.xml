@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ChangpianDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.changpian_name as changpianName
+        ,a.changpian_photo as changpianPhoto
+        ,a.changpian_music as changpianMusic
+        ,a.changpian_types as changpianTypes
+        ,a.changpian_kucun_number as changpianKucunNumber
+        ,a.changpian_old_money as changpianOldMoney
+        ,a.changpian_new_money as changpianNewMoney
+        ,a.changpian_clicknum as changpianClicknum
+        ,a.shangxia_types as shangxiaTypes
+        ,a.changpian_delete as changpianDelete
+        ,a.changpian_content as changpianContent
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ChangpianView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM changpian  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.changpianName != '' and params.changpianName != null and params.changpianName != 'null' ">
+                and a.changpian_name like CONCAT('%',#{params.changpianName},'%')
+            </if>
+            <if test=" params.changpianMusic != '' and params.changpianMusic != null and params.changpianMusic != 'null' ">
+                and a.changpian_music like CONCAT('%',#{params.changpianMusic},'%')
+            </if>
+            <if test="params.changpianTypes != null and params.changpianTypes != ''">
+                and a.changpian_types = #{params.changpianTypes}
+            </if>
+            <if test="params.changpianKucunNumberStart != null and params.changpianKucunNumberStart != ''">
+                <![CDATA[  and a.changpian_kucun_number >= #{params.changpianKucunNumberStart}   ]]>
+            </if>
+            <if test="params.changpianKucunNumberEnd != null and params.changpianKucunNumberEnd != ''">
+                <![CDATA[  and a.changpian_kucun_number <= #{params.changpianKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.changpianKucunNumber != null and params.changpianKucunNumber != ''">
+                and a.changpian_kucun_number = #{params.changpianKucunNumber}
+             </if>
+            <if test="params.changpianOldMoneyStart != null ">
+                <![CDATA[  and a.changpian_old_money >= #{params.changpianOldMoneyStart}   ]]>
+            </if>
+            <if test="params.changpianOldMoneyEnd != null ">
+                <![CDATA[  and a.changpian_old_money <= #{params.changpianOldMoneyEnd}   ]]>
+            </if>
+            <if test="params.changpianNewMoneyStart != null ">
+                <![CDATA[  and a.changpian_new_money >= #{params.changpianNewMoneyStart}   ]]>
+            </if>
+            <if test="params.changpianNewMoneyEnd != null ">
+                <![CDATA[  and a.changpian_new_money <= #{params.changpianNewMoneyEnd}   ]]>
+            </if>
+            <if test="params.changpianClicknumStart != null and params.changpianClicknumStart != ''">
+                <![CDATA[  and a.changpian_clicknum >= #{params.changpianClicknumStart}   ]]>
+            </if>
+            <if test="params.changpianClicknumEnd != null and params.changpianClicknumEnd != ''">
+                <![CDATA[  and a.changpian_clicknum <= #{params.changpianClicknumEnd}   ]]>
+            </if>
+             <if test="params.changpianClicknum != null and params.changpianClicknum != ''">
+                and a.changpian_clicknum = #{params.changpianClicknum}
+             </if>
+            <if test="params.shangxiaTypes != null and params.shangxiaTypes != ''">
+                and a.shangxia_types = #{params.shangxiaTypes}
+            </if>
+            <if test="params.changpianDeleteStart != null and params.changpianDeleteStart != ''">
+                <![CDATA[  and a.changpian_delete >= #{params.changpianDeleteStart}   ]]>
+            </if>
+            <if test="params.changpianDeleteEnd != null and params.changpianDeleteEnd != ''">
+                <![CDATA[  and a.changpian_delete <= #{params.changpianDeleteEnd}   ]]>
+            </if>
+             <if test="params.changpianDelete != null and params.changpianDelete != ''">
+                and a.changpian_delete = #{params.changpianDelete}
+             </if>
+            <if test=" params.changpianContent != '' and params.changpianContent != null and params.changpianContent != 'null' ">
+                and a.changpian_content like CONCAT('%',#{params.changpianContent},'%')
+            </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
